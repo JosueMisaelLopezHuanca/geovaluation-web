@@ -1,17 +1,27 @@
 :root {
-  color-scheme: dark;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color-scheme: light;
+  font-family:
+    "Aptos",
+    "Segoe UI Variable",
+    "Segoe UI",
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  color: #e5eef5;
-  background:
-    radial-gradient(circle at top left, rgba(34, 211, 238, 0.12), transparent 28%),
-    radial-gradient(circle at top right, rgba(251, 113, 133, 0.14), transparent 22%),
-    linear-gradient(180deg, #08111f 0%, #0e1729 42%, #050b14 100%);
+  color: #1d2c22;
+  background: #edf2ea;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  color: #edf5e8;
+  background: #07120d;
 }
 
 * {
@@ -27,15 +37,27 @@ body,
 
 body {
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 button,
-input {
+input,
+select,
+textarea {
   font: inherit;
 }
 
 button {
   cursor: pointer;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+a:focus-visible {
+  outline: 3px solid rgba(46, 157, 179, 0.35);
+  outline-offset: 2px;
 }
 
 a {

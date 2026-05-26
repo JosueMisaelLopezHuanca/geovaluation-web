@@ -13,6 +13,11 @@ const renderValue = (value, fallback = "Sin dato") => {
   return value
 }
 
+const formatTablesCount = (tables = []) => {
+  if (!Array.isArray(tables)) return 0
+  return tables.length
+}
+
 const DetailGrid = ({ title, items }) => (
   <>
     <div className="panel-subheader">
@@ -42,11 +47,11 @@ const AvaluosHistoryPanel = ({
 }) => {
   const resumenItems = selectedAvaluo
     ? [
-        { label: "ID avalúo", value: selectedAvaluo.appraisal_id },
+        { label: "ID avaluo", value: selectedAvaluo.appraisal_id },
         { label: "Valor terreno", value: formatCurrency(selectedAvaluo.valor_terreno) },
-        { label: "Valor construcción", value: formatCurrency(selectedAvaluo.valor_construccion) },
+        { label: "Valor construccion", value: formatCurrency(selectedAvaluo.valor_construccion) },
         { label: "Base imponible", value: formatCurrency(selectedAvaluo.base_imponible) },
-        { label: "Impuesto estimado", value: formatCurrency(selectedAvaluo.impuesto_estimado) },
+        { label: "IMPBI estimado", value: formatCurrency(selectedAvaluo.impuesto_estimado) },
       ]
     : []
 
@@ -57,11 +62,11 @@ const AvaluosHistoryPanel = ({
           value: renderValue(selectedAvaluo.contexto_espacial?.zona_tributaria_codigo),
         },
         {
-          label: "Material vía",
+          label: "Material via",
           value: renderValue(selectedAvaluo.contexto_espacial?.material_via_codigo),
         },
         {
-          label: "Zona homogénea",
+          label: "Zona homogenea",
           value: renderValue(selectedAvaluo.contexto_espacial?.zona_homogenea_codigo),
         },
         {
@@ -80,7 +85,7 @@ const AvaluosHistoryPanel = ({
   const auditoriaItems = selectedAvaluo
     ? [
         {
-          label: "Superficie cálculo",
+          label: "Superficie calculo",
           value: `${formatNumber(selectedAvaluo.auditoria?.superficie_calculo || 0)} m2`,
         },
         {
@@ -96,7 +101,7 @@ const AvaluosHistoryPanel = ({
         },
         {
           label: "Tablas usadas",
-          value: selectedAvaluo.tablas_utilizadas?.length || 0,
+          value: formatTablesCount(selectedAvaluo.tablas_utilizadas),
         },
         {
           label: "Bloques procesados",
@@ -110,12 +115,17 @@ const AvaluosHistoryPanel = ({
       <div className="panel-subheader panel-subheader-inline history-header">
         <div>
           <p className="eyebrow">Historial</p>
-          <h3>Avalúos guardados</h3>
+          <h3>Avaluos guardados</h3>
         </div>
         <button type="button" className="secondary-button" onClick={onRefresh}>
           Actualizar
         </button>
-        <button type="button" className="secondary-button" onClick={onPrintReport} disabled={!selectedAvaluo}>
+        <button
+          type="button"
+          className="secondary-button"
+          onClick={onPrintReport}
+          disabled={!selectedAvaluo}
+        >
           Imprimir detalle
         </button>
       </div>
@@ -124,7 +134,7 @@ const AvaluosHistoryPanel = ({
       {error ? <p className="error-text">{error}</p> : null}
 
       {!loading && items.length === 0 ? (
-        <p className="muted">Todavía no hay avalúos guardados para mostrar.</p>
+        <p className="muted">Todavia no hay avaluos guardados para mostrar.</p>
       ) : null}
 
       <div className="history-list">
@@ -148,7 +158,7 @@ const AvaluosHistoryPanel = ({
         <>
           <DetailGrid title="Resumen guardado" items={resumenItems} />
           <DetailGrid title="Contexto espacial" items={contextoItems} />
-          <DetailGrid title="Auditoría y trazabilidad" items={auditoriaItems} />
+          <DetailGrid title="Auditoria y trazabilidad" items={auditoriaItems} />
         </>
       ) : null}
     </section>

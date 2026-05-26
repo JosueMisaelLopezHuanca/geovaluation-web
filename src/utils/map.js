@@ -65,4 +65,40 @@ export const formatPercent = (value, maximumFractionDigits = 1) =>
   `${formatNumber(value ?? 0, maximumFractionDigits)}%`
 
 export const getFeatureLabel = (feature) =>
-  feature?.properties?.codigo || feature?.properties?.codigo_catastral || "Sin codigo"
+  feature?.properties?.codigo ||
+  feature?.properties?.nombre ||
+  feature?.properties?.codigo_catastral ||
+  "Sin codigo"
+
+const collectCoordinatePairs = (coordinates, pairs = []) => {
+  if (!Array.isArray(coordinates)) return pairs
+  if (typeof coordinates[0] === "number" && typeof coordinates[1] === "number") {
+    pairs.push(coordinates)
+    return pairs
+  }
+
+  coordinates.forEach((coordinate) => collectCoordinatePairs(coordinate, pairs))
+  return pairs
+}
+
+export const getFeatureCenter = (feature) => {
+  const pairs = collectCoordinatePairs(feature?.geometry?.coordinates)
+  if (!pairs.length) {
+    const lat = Number(feature?.properties?.centroide_lat)
+    const lng = Number(feature?.properties?.centroide_lng)
+    return Number.isFinite(lat) && Number.isFinite(lng) ? { lat, lng } : null
+  }
+
+  const total = pairs.reduce(
+    (acc, [lng, lat]) => ({
+      lat: acc.lat + Number(lat || 0),
+      lng: acc.lng + Number(lng || 0),
+    }),
+    { lat: 0, lng: 0 }
+  )
+
+  return {
+    lat: total.lat / pairs.length,
+    lng: total.lng / pairs.length,
+  }
+}

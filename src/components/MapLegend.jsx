@@ -36,6 +36,13 @@ const MapLegend = () => {
           </div>
         </div>
         <div className="legend-item">
+          <span className="legend-swatch otb" />
+          <div>
+            <strong>OTBs</strong>
+            <p>Limite barrial/comunitario para orientar consultas prediales.</p>
+          </div>
+        </div>
+        <div className="legend-item">
           <span className="legend-swatch pendiente" />
           <div>
             <strong>Pendientes</strong>
