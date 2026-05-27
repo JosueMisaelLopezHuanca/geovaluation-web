@@ -11,8 +11,13 @@ const layerConfig = [
   },
   {
     key: "zonas_homogeneas",
-    title: "Zonas homogéneas",
+    title: "Zonas homogeneas",
     description: "Ajuste espacial fino para zona de valor y lectura tributaria.",
+  },
+  {
+    key: "otbs",
+    title: "OTBs",
+    description: "Organizaciones territoriales de base para lectura barrial y comunitaria.",
   },
   {
     key: "pendientes",
@@ -22,14 +27,23 @@ const layerConfig = [
   {
     key: "riesgos",
     title: "Riesgos",
-    description: "Contexto físico complementario visible sobre el predio.",
+    description: "Contexto fisico complementario visible sobre el predio.",
+  },
+  {
+    key: "diferencias_superficie",
+    title: "Dif. GIS vs legal",
+    description: "Lectura masiva de inconsistencias entre superficie GIS y legal.",
   },
 ]
 
 const opacityConfig = [
   {
     key: "zonas_homogeneas",
-    label: "Zonas homogéneas",
+    label: "Zonas homogeneas",
+  },
+  {
+    key: "otbs",
+    label: "OTBs",
   },
   {
     key: "pendientes",
@@ -38,6 +52,10 @@ const opacityConfig = [
   {
     key: "riesgos",
     label: "Riesgos",
+  },
+  {
+    key: "diferencias_superficie",
+    label: "Dif. GIS vs legal",
   },
 ]
 

@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { getAvaluoById, listAvaluos } from "../services/avaluos.service"
 
-export const useAvaluosHistory = () => {
+export const useAvaluosHistory = ({ enabled = true, authToken = "" } = {}) => {
   const [items, setItems] = useState([])
   const [selectedId, setSelectedId] = useState("")
   const [selectedAvaluo, setSelectedAvaluo] = useState(null)
@@ -9,25 +9,39 @@ export const useAvaluosHistory = () => {
   const [loadingDetail, setLoadingDetail] = useState(false)
   const [error, setError] = useState("")
 
-  const loadHistory = async () => {
+  const loadHistory = useCallback(async () => {
+    if (!enabled) {
+      setItems([])
+      setSelectedId("")
+      setSelectedAvaluo(null)
+      return []
+    }
+
     setLoading(true)
     setError("")
 
     try {
-      const response = await listAvaluos(12)
+      const response = await listAvaluos(12, authToken)
       setItems(response)
+      return response
     } catch (historyError) {
       setError(historyError.message || "No se pudo cargar el historial")
+      return []
     } finally {
       setLoading(false)
     }
-  }
+  }, [authToken, enabled])
 
   useEffect(() => {
     loadHistory()
-  }, [])
+  }, [loadHistory])
 
   useEffect(() => {
+    if (!enabled) {
+      setSelectedAvaluo(null)
+      return
+    }
+
     if (!selectedId) {
       setSelectedAvaluo(null)
       return
@@ -40,7 +54,7 @@ export const useAvaluosHistory = () => {
       setError("")
 
       try {
-        const response = await getAvaluoById(selectedId)
+        const response = await getAvaluoById(selectedId, authToken)
         if (mounted) {
           setSelectedAvaluo(response)
         }
@@ -60,7 +74,7 @@ export const useAvaluosHistory = () => {
     return () => {
       mounted = false
     }
-  }, [selectedId])
+  }, [authToken, enabled, selectedId])
 
   return {
     items,
