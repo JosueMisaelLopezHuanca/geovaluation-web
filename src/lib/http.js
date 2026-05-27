@@ -2,17 +2,33 @@ import { env } from "../config/env"
 
 const API_PORT = "8000"
 const API_REQUEST_TIMEOUT_MS = 12000
+const LOCAL_API_FALLBACKS = ["http://127.0.0.1:8000", "http://localhost:8000"]
 let activeApiBaseUrl = ""
 
+const isLocalNetworkHostname = (hostname) => {
+  const normalizedHostname = hostname.replace(/^\[|\]$/g, "").toLowerCase()
+
+  return (
+    normalizedHostname === "localhost" ||
+    normalizedHostname === "::1" ||
+    normalizedHostname.startsWith("127.") ||
+    normalizedHostname.startsWith("10.") ||
+    normalizedHostname.startsWith("192.168.") ||
+    /^172\.(1[6-9]|2\d|3[01])\./.test(normalizedHostname)
+  )
+}
+
 const getApiBaseCandidates = () => {
-  const candidates = []
+  const candidates = [env.apiBaseUrl]
 
-  if (typeof window !== "undefined" && window.location?.hostname) {
+  if (
+    typeof window !== "undefined" &&
+    window.location?.hostname &&
+    isLocalNetworkHostname(window.location.hostname)
+  ) {
     candidates.push(`${window.location.protocol}//${window.location.hostname}:${API_PORT}`)
+    candidates.push(...LOCAL_API_FALLBACKS)
   }
-
-  candidates.push(env.apiBaseUrl)
-  candidates.push("http://127.0.0.1:8000", "http://localhost:8000")
 
   return [...new Set(candidates.map((baseUrl) => baseUrl.replace(/\/$/, "")))]
 }
